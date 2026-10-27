@@ -36,7 +36,7 @@ class Boy:
             self.x = max(50, min(750, self.x + self.face_dir * 5))
             self.frame = (self.frame + 1) % 8
         elif self.state == 'AUTORUN':
-            next_x = self.x + self.face_dir * 5
+            next_x = self.x + self.face_dir * 10
             if next_x <= 50:
                 self.x = 50
                 self.face_dir = 1
