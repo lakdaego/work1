@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="720" viewBox="0 0 1000 720" role="img" aria-labelledby="title description">
+  <title id="title">캐릭터 상태 다이어그램</title>
+  <desc id="description">IDLE, RUN, SLEEP, AUTORUN 상태와 키 입력 및 시간 경과에 따른 전이를 나타낸다.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155"/>
+    </marker>
+    <style>
+      .title { font: 700 28px "Segoe UI", "Malgun Gothic", sans-serif; fill: #0f172a; }
+      .subtitle { font: 15px "Segoe UI", "Malgun Gothic", sans-serif; fill: #475569; }
+      .state { stroke: #334155; stroke-width: 2.5; }
+      .state-name { font: 700 22px "Segoe UI", "Malgun Gothic", sans-serif; fill: #0f172a; text-anchor: middle; }
+      .state-detail { font: 14px "Segoe UI", "Malgun Gothic", sans-serif; fill: #334155; text-anchor: middle; }
+      .edge { fill: none; stroke: #334155; stroke-width: 2.5; marker-end: url(#arrow); }
+      .label { font: 14px "Segoe UI", "Malgun Gothic", sans-serif; fill: #0f172a; text-anchor: middle; }
+      .note { font: 14px "Segoe UI", "Malgun Gothic", sans-serif; fill: #334155; }
+    </style>
+  </defs>
+
+  <rect width="1000" height="720" fill="#f8fafc"/>
+  <text class="title" x="500" y="46" text-anchor="middle">캐릭터 상태 다이어그램</text>
+  <text class="subtitle" x="500" y="73" text-anchor="middle">현재 boy.py 구현 기준</text>
+
+  <circle cx="500" cy="112" r="13" fill="#0f172a"/>
+  <path class="edge" d="M 500 126 L 500 151"/>
+
+  <rect class="state" x="405" y="155" width="190" height="90" rx="18" fill="#dbeafe"/>
+  <text class="state-name" x="500" y="190">IDLE</text>
+  <text class="state-detail" x="500" y="216">대기 애니메이션</text>
+
+  <rect class="state" x="90" y="385" width="210" height="100" rx="18" fill="#dcfce7"/>
+  <text class="state-name" x="195" y="423">RUN</text>
+  <text class="state-detail" x="195" y="450">방향키로 이동</text>
+
+  <rect class="state" x="700" y="385" width="210" height="100" rx="18" fill="#f1f5f9"/>
+  <text class="state-name" x="805" y="423">SLEEP</text>
+  <text class="state-detail" x="805" y="450">잠든 애니메이션</text>
+
+  <rect class="state" x="405" y="555" width="190" height="100" rx="18" fill="#ffedd5"/>
+  <text class="state-name" x="500" y="592">AUTORUN</text>
+  <text class="state-detail" x="500" y="619">자동 이동 · 2배 속도/크기</text>
+
+  <path class="edge" d="M 422 237 C 380 280, 325 325, 280 383"/>
+  <rect x="292" y="270" width="146" height="42" rx="8" fill="#f8fafc"/>
+  <text class="label" x="365" y="287">← / → 누름</text>
+  <text class="label" x="365" y="305">(IDLE에서)</text>
+
+  <path class="edge" d="M 310 390 C 355 337, 395 294, 443 240"/>
+  <rect x="285" y="328" width="151" height="40" rx="8" fill="#f8fafc"/>
+  <text class="label" x="360" y="345">모든 방향키 뗌</text>
+  <text class="label" x="360" y="363">(RUN에서)</text>
+
+  <path class="edge" d="M 578 237 C 620 280, 675 325, 720 383"/>
+  <rect x="562" y="270" width="150" height="42" rx="8" fill="#f8fafc"/>
+  <text class="label" x="637" y="287">IDLE 5초 경과</text>
+  <text class="label" x="637" y="305">자동 전이</text>
+
+  <path class="edge" d="M 710 390 C 665 337, 625 294, 577 240"/>
+  <rect x="572" y="328" width="130" height="40" rx="8" fill="#f8fafc"/>
+  <text class="label" x="637" y="353">SPACE 누름</text>
+
+  <path class="edge" d="M 460 245 L 460 555"/>
+  <rect x="416" y="375" width="88" height="34" rx="8" fill="#f8fafc"/>
+  <text class="label" x="460" y="398">`a` 누름</text>
+
+  <path class="edge" d="M 540 555 L 540 245"/>
+  <rect x="548" y="408" width="104" height="50" rx="8" fill="#f8fafc"/>
+  <text class="label" x="600" y="428">5초 경과</text>
+  <text class="label" x="600" y="447">자동 전이</text>
+
+  <path class="edge" d="M 410 585 C 285 545, 65 545, 65 405 C 65 280, 225 190, 405 190"/>
+  <rect x="58" y="275" width="155" height="45" rx="8" fill="#f8fafc"/>
+  <text class="label" x="135" y="294">← / → 누름</text>
+  <text class="label" x="135" y="312">취소 후 RUN</text>
+
+  <rect x="180" y="671" width="640" height="34" rx="8" fill="#e2e8f0"/>
+  <text class="note" x="500" y="693" text-anchor="middle">AUTORUN 중 화면 끝에 도달하면 상태는 유지하고 이동 방향만 반전합니다.</text>
+</svg>
