@@ -15,8 +15,11 @@ class AutoRunState:
     def start(self):
         self.started_at = time.monotonic()
 
-    def handle_event(self, event):
-        pass
+    def handle_event(self, boy, event):
+        if event.type == SDL_KEYDOWN and event.key in (SDLK_LEFT, SDLK_RIGHT):
+            boy.direction_keys.add(event.key)
+            boy.face_dir = -1 if event.key == SDLK_LEFT else 1
+            boy.cancel_autorun()
 
     def update(self, boy):
         if time.monotonic() - self.started_at >= 5:
@@ -60,6 +63,7 @@ class Boy:
         )
         self.machine.add_transition('run', ['IDLE', 'SLEEP'], 'RUN')
         self.machine.add_transition('autorun', 'IDLE', 'AUTORUN')
+        self.machine.add_transition('cancel_autorun', 'AUTORUN', 'RUN')
         self.machine.add_transition('finish_autorun', 'AUTORUN', 'IDLE')
         self.machine.add_transition('stop_running', 'RUN', 'IDLE')
         self.machine.add_transition('sleep', 'IDLE', 'SLEEP')
@@ -78,7 +82,7 @@ class Boy:
 
     def handle_event(self, event):
         if self.state == 'AUTORUN':
-            self.autorun_state.handle_event(event)
+            self.autorun_state.handle_event(self, event)
             return
 
         if (
