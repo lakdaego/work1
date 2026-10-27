@@ -9,10 +9,21 @@ from transitions import Machine
 
 
 class AutoRunState:
+    def __init__(self):
+        self.started_at = time.monotonic()
+
+    def start(self):
+        self.started_at = time.monotonic()
+
     def handle_event(self, event):
         pass
 
     def update(self, boy):
+        if time.monotonic() - self.started_at >= 5:
+            boy.finish_autorun()
+            boy.idle_since = time.monotonic()
+            return
+
         next_x = boy.x + boy.face_dir * 10
         if next_x <= 100:
             boy.x = 100
@@ -49,6 +60,7 @@ class Boy:
         )
         self.machine.add_transition('run', ['IDLE', 'SLEEP'], 'RUN')
         self.machine.add_transition('autorun', 'IDLE', 'AUTORUN')
+        self.machine.add_transition('finish_autorun', 'AUTORUN', 'IDLE')
         self.machine.add_transition('stop_running', 'RUN', 'IDLE')
         self.machine.add_transition('sleep', 'IDLE', 'SLEEP')
         self.machine.add_transition('wake', 'SLEEP', 'IDLE')
@@ -75,6 +87,7 @@ class Boy:
             and event.key == SDLK_a
         ):
             self.autorun()
+            self.autorun_state.start()
             return
 
         if event.type == SDL_KEYDOWN and event.key in (SDLK_LEFT, SDLK_RIGHT):
