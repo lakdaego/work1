@@ -7,12 +7,38 @@ from pico2d import (
 )
 from transitions import Machine
 
+
+class AutoRunState:
+    def handle_event(self, event):
+        pass
+
+    def update(self, boy):
+        next_x = boy.x + boy.face_dir * 10
+        if next_x <= 100:
+            boy.x = 100
+            boy.face_dir = 1
+        elif next_x >= 700:
+            boy.x = 700
+            boy.face_dir = -1
+        else:
+            boy.x = next_x
+        boy.frame = (boy.frame + 1) % 8
+
+    def draw(self, boy):
+        source_y = 100 if boy.face_dir == 1 else 0
+        boy.image.clip_draw(
+            boy.frame * 100, source_y, 100, 100,
+            boy.x, boy.y, 200, 200,
+        )
+
+
 class Boy:
     def __init__(self):
         self.x, self.y = 400, 90
         self.frame = 0
         self.face_dir = 1
         self.direction_keys = set()
+        self.autorun_state = AutoRunState()
         self.idle_since = time.monotonic()
         self.image = load_image('animation_sheet.png')
         self.machine = Machine(
@@ -36,19 +62,11 @@ class Boy:
             self.x = max(50, min(750, self.x + self.face_dir * 5))
             self.frame = (self.frame + 1) % 8
         elif self.state == 'AUTORUN':
-            next_x = self.x + self.face_dir * 10
-            if next_x <= 50:
-                self.x = 50
-                self.face_dir = 1
-            elif next_x >= 750:
-                self.x = 750
-                self.face_dir = -1
-            else:
-                self.x = next_x
-            self.frame = (self.frame + 1) % 8
+            self.autorun_state.update(self)
 
     def handle_event(self, event):
         if self.state == 'AUTORUN':
+            self.autorun_state.handle_event(event)
             return
 
         if (
@@ -95,7 +113,11 @@ class Boy:
             )
             return
 
-        if self.state in ('RUN', 'AUTORUN'):
+        if self.state == 'AUTORUN':
+            self.autorun_state.draw(self)
+            return
+
+        if self.state == 'RUN':
             source_y = 100 if self.face_dir == 1 else 0
         else:
             source_y = 300 if self.face_dir == 1 else 200
